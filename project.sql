@@ -85,3 +85,23 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+@echo off
+title Aktivasi Microsoft Office 2019 Tanpa Software - BagiTekno&cls&echo ============================================================================&echo #Project: Aktivasi Microsoft Office 2019 FREE tanpa software&echo ============================================================================&echo.&echo #Supported products:&echo - Microsoft Office Standard 2019&echo - Microsoft Office Professional Plus 2019&echo.&echo.&(if exist "%ProgramFiles%\Microsoft Office\Office16\ospp.vbs" cd /d "%ProgramFiles%\Microsoft Office\Office16")&(if exist "%ProgramFiles(x86)%\Microsoft Office\Office16\ospp.vbs" cd /d "%ProgramFiles(x86)%\Microsoft Office\Office16")&(for /f %%x in ('dir /b ..\root\Licenses16\ProPlus2019VL*.xrm-ms') do cscript ospp.vbs /inslic:"..\root\Licenses16\%%x" >nul)&(for /f %%x in ('dir /b ..\root\Licenses16\ProPlus2019VL*.xrm-ms') do cscript ospp.vbs /inslic:"..\root\Licenses16\%%x" >nul)&echo.&echo ============================================================================&echo Mengaktivasi Office 2019 anda, silahkan tunggu...&cscript //nologo slmgr.vbs /ckms >nul&cscript //nologo ospp.vbs /setprt:1688 >nul&cscript //nologo ospp.vbs /unpkey:6MWKP >nul&set i=1&cscript //nologo ospp.vbs /inpkey:NMMKJ-6RK4F-KMJVX-8D9MJ-6MWKP >nul||goto notsupported
+:server
+if %i% GTR 10 goto busy
+if %i% EQU 1 set KMS=s8.uk.to
+if %i% EQU 2 set KMS=s9.uk.to
+if %i% EQU 3 set KMS=kms7.MSGuides.com
+if %i% EQU 4 set KMS=kms8.MSGuides.com
+if %i% EQU 5 set KMS=kms9.MSGuides.com
+if %i% GTR 5 goto ato
+cscript //nologo ospp.vbs /sethst:%KMS% >nul
+:ato
+echo ============================================================================&echo.&echo.&cscript //nologo ospp.vbs /act | find /i "successful" && (echo.&echo ============================================================================&echo.&echo.&echo #Dukung kami agar cara ini bisa terus digunakan!&echo #Donasi bisa via saweria.co/bagitekno atau donate.msguides.com&echo #Terima kasih atas dukungan anda!&echo.&echo ============================================================================& if errorlevel 2 exit) || (echo Sepertinya butuh waktu lebih, silahkan tunggu... & echo. & echo. & set /a i+=1 & goto server)&explorer "https://saweria.co/bagitekno"&explorer "https://youtu.be/LGJ9GMn17Zk"&goto halt
+:notsupported
+echo.&echo ============================================================================&echo Maaf, Office 2019 anda tidak support.&echo.&goto halt
+:busy
+echo =====================================================================================&echo.&echo Server sedang sibuk, sedang mencoba lagi, silahkan tunggu...&echo.&set /a i=1&goto server
+:halt
+cd %~dp0&del %0 >nul&pause >nul
