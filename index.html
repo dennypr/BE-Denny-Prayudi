@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <title>Automation Pelaporan Pajak Domestik & Pelaporan CRS</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/img/favicon.ico" />
+
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,600,700&display=swap" rel="stylesheet">
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/plugins.css" rel="stylesheet" type="text/css" />
+    <!-- END GLOBAL MANDATORY STYLES -->
+
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+    <style>
+
+    .navbar .navbar-item.navbar-dropdown {
+      margin-left: auto;
+    }
+
+    .layout-px-spacing {
+      min-height: calc(100vh - 125px) !important;
+    }
+
+
+
+    /* spinner*/
+
+    .loaderDelete {
+      display: none;
+      top: 15%;
+      left: 50%;
+      position: absolute;
+      transform: translate(-50%, -50%);
+    }
+
+    .loadingDelete {
+      border: 10px solid #ccc;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border-top-color: orange;
+      border-left-color: orange;
+      animation: spin 1s infinite ease-in;
+    }
+
+    .loader {
+      display: none;
+      top: 15%;
+      left: 50%;
+      position: absolute;
+      transform: translate(-50%, -50%);
+    }
+
+    .loading {
+      border: 10px solid #ccc;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border-top-color: orange;
+      border-left-color: orange;
+      animation: spin 1s infinite ease-in;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+
+    .fontHeader {
+       font-family: Calibri;
+    }
+}
+
+   </style>
+
+    <link rel="stylesheet" type="text/css" href="/assets/css/tables/table-basic.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/components/custom-modal.css" />
+
+    <link rel="stylesheet" type="text/css" href="/plugins/table/datatable/datatables.css">
+    <link rel="stylesheet" type="text/css" href="/plugins/table/datatable/dt-global_style.css">
+
+    <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+    <style id='antiClickjack'>
+    body{display:none !important;}
+
+    </style>
+
+    <script type="text/javascript">
+      function validate(){
+            if (document.getElementById('remember').checked){
+                var ele=document.querySelectorAll('.chk');
+                    for(var i=0; i<ele.length; i++){
+                        if(ele[i].type=='checkbox')
+                            ele[i].checked=true;
+                    }
+            } else {
+                var ele=document.querySelectorAll('.chk');
+                    for(var i=0; i<ele.length; i++){
+                        if(ele[i].type=='checkbox')
+                            ele[i].checked=false;
+
+                    }
+            }
+        }
+        function setApprove(){
+
+           $(".approvareject").val("Approve All");
+           // document.getElementById('approvareject').value='Approve All';
+        }
+         function setReject(){
+           $(".approvareject").val("Reject All");
+           //document.getElementById('approvareject').value='Reject All';
+        }
+    </script>
+    <script type='text/javascript'>
+
+        if (self === top) {
+            var antiClickjack = document.getElementById('antiClickjack');
+            antiClickjack.parentNode.removeChild(antiClickjack);
+        } else {
+            top.location = self.location;
+        }
+
+         function spinner() {
+                document.getElementsByClassName("loader")[0].style.display = "block";
+            }
+
+         function unspinner() {
+                document.getElementsByClassName("loader")[0].style.display = false;
+            }
+
+          function spinnerDelete() {
+                document.getElementsByClassName("loaderDelete")[0].style.display = "block";
+            }
+
+
+
+    function alertData(){
+      var data        = $("#percent").val();
+      var datacustody = $("#percentcustody").val();
+
+      const date = new Date();
+    //YYY-MM-DD
+    // const start = new Date(date.getFullYear()- 1 +'-12-31');
+      const start   = new Date(date.getFullYear()+'-08-13');
+      const end     = new Date(date.getFullYear()+'-08-30');
+    //range antara tangal 1 - 10 januari ditahun 2023. batas sampe jam 7
+
+      if (date > start && date < end) {
+
+       if(data == "100% complate "){
+            document.querySelector('#popupmessage').click();
+        }else if(data != "100% complate " && data !=null){
+            document.querySelector('#popupmessageUn').click();
+        }
+
+        if(datacustody == "100% complate "){
+            document.querySelector('#popupmessagecustody').click();
+        }else if(datacustody != "100% complate " && datacustody !=null){
+            document.querySelector('#popupmessagecustodyUn').click();
+        }
+      }
+    }
+
+    </script>
+    <script>
+            var time = new Date().getTime();
+
+            document.onmousemove = function(event) {
+                time = new Date().getTime();
+            }
+
+            document.onkeypress = function() {
+                time = new Date().getTime();
+            }
+
+            function refresh() {
+                if (new Date().getTime() - time >= 900000) {
+                    document.getElementById("ada").click();
+                    alert("Session expired please login again");
+                    location.href = window.location.origin+'/login';
+                } else {
+                    setTimeout(refresh, 900000);
+                }
+            }
+
+            setTimeout(refresh, 1000);
+        </script>
+
+</head>
+
+<body onload="alertData()" id="ada">
+    <!--  BEGIN NAVBAR  -->
+    <div th:replace="fragments/navbar :: navbar" />
+    <!--  END NAVBAR  -->
+
+    <!--  BEGIN MAIN CONTAINER  -->
+    <div class="main-container" id="container">
+        <div class="overlay"></div>
+        <div class="search-overlay"></div>
+
+        <!--  BEGIN SIDEBAR  -->
+        <div th:replace="fragments/sidebar :: sidebar" />
+        <!--  END SIDEBAR  -->
+
+        <!--  BEGIN CONTENT AREA  -->
+        <div id="content" class="main-content">
+            <div class="layout-px-spacing">
+                <!-- CONTENT AREA -->
+                <div th:replace="@{'content/' + ${contentPath}} :: ${contentName}" />
+                <!-- CONTENT AREA -->
+            </div>
+
+            <div th:replace="fragments/footer :: footer" />
+        </div>
+        <!--  END CONTENT AREA  -->
+    </div>
+    <!-- END MAIN CONTAINER -->
+
+    <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
+<!--    <script src="/assets/js/libs/jquery-3.1.1.min.js"></script>-->
+    <script src="/assets/js/libs/jquery-3.6.1.min.js"></script>
+    <script src="/bootstrap/js/popper.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="/assets/js/app.js"></script>
+
+<!--    <script src="/dist/js/controller.js"></script>-->
+    <script>
+        $(document).ready(function () {
+            App.init();
+
+            var cookiesValueUsername = Cookies.get('username');
+            // console.log("TEST GET COOKIES USERNAME : " + cookiesValueUsername);
+
+            var username = document.getElementById("username");
+            // console.log("TEST GET USERNAME ELEMENT HTML : " + username);
+
+            username.innerHTML = cookiesValueUsername;
+        });
+    </script>
+
+    <script src="/plugins/highlight/highlight.pack.js"></script>
+    <script src="/assets/js/custom.js"></script>
+    <!-- END GLOBAL MANDATORY SCRIPTS -->
+
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+    <script src="/plugins/table/datatable/datatables.js"></script>
+    <script src="/custom/js/crscustomtable.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+    <!--END PAGE LEVEL PLUGINS / CUSTOM SCRIPTS-->
+</body>
+
+</html>

@@ -1,0 +1,668 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <style id='antiClickjack'>
+    body{display:none !important;}
+</style>
+
+    <script type='text/javascript'>
+    if (self === top) {
+    var antiClickjack = document.getElementById('antiClickjack');
+    antiClickjack.parentNode.removeChild(antiClickjack);
+    } else {
+    top.location = self.location;
+    }
+</script>
+</head>
+<body>
+<div th:fragment="uploadapprovalorrcustody" class="row layout-top-spacing" id="cancel-row">
+    <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+        <div class="widget-content widget-content-area br-6">
+            <div class="widget-header">
+                <div class="row">
+                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                        <h1>Form Approval Edit Data Domestik Custody</h1>
+                        <h2>(Replace Pesonal)</h2><br>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+            <div class="container">
+                <div class="alert alert-success" role="alert" th:text="${Success}" th:if="${Success}"></div>
+                <div class="alert alert-warning" role="alert" th:text="${Failed}" th:if="${Failed}"></div>
+            </div>
+            <div th:switch="${alreadyDataPersonal}" class="container">
+                <div th:case="false" class="table-responsive mb-3 mt-3">
+                    <h3>No Data</h3>
+                </div>
+                <div th:case="true" class="table-responsive mb-3 mt-3">
+
+                    <form action="#" th:action="@{/custody/approval/approvalallpersonal}" th:object="${approvalReject}" method="post">
+                    <input type="text" id="approvareject" class="approvareject" name="approvareject"  th:field="*{ApproveReject}" />
+
+                    <table id="DataRekening" class="table" style="width:100%">
+                        <caption>
+                            <label th:text="'List of all User Role - total : ' + ${totalRoleDataPersonal}">
+                            </label>
+                        </caption>
+                        <thead class="thead-light">
+                        <tr>
+                            <th class="head_text">
+                                <input type="submit" value="Approve all" onclick="setApprove()">
+                                <input type="submit" value="Reject all" onclick="setReject()"><br>
+                                <input type="checkbox" id="remember" name="remember"  onclick="validate()" />
+                            </th>
+                            <th class="head_text">Action</th>
+                            <th class="head_text">Maker Name</th>
+                            <th class="head_text">User ID</th>
+                            <th class="head_text">IdentitasUnik</th>
+                            <th class="heada_text" bgcolor="#F0F8FF">IdentitasUnik After</th>
+                            <th class="head_text">Nomor CIF</th>
+                            <th class="heada_text">Nomor CIF After</th>
+                            <th class="head_text">Nomor Rekening</th>
+                            <th class="heada_text">Nomor Rekening After</th>
+                            <th class="head_text">Nomor Cif Nomor Rekening</th>
+                            <th class="heada_text">Nomor Cif Nomor Rekening After</th>
+                            <th class="head_text">Sts Rekening</th>
+                            <th class="heada_text">Sts Rekening After</th>
+                            <th class="head_text">Jns PemegangRekening</th>
+                            <th class="heada_text">Jns PemegangRekening After</th>
+                            <th class="head_text">Mata Uang</th>
+                            <th class="heada_text">Mata Uang After</th>
+                            <th class="head_text">Nama Pemegang Rek</th>
+                            <th class="heada_text" >Nama Pemegang After</th>
+                            <th class="head_text">NPWP Pemegang Rek</th>
+                            <th class="heada_text">NPWP Pemegang Rek After</th>
+                            <th class="head_text">NIK Pemegang Rek</th>
+                            <th class="heada_text">NIK Pemegang Rek After</th>
+                            <th class="head_text">SIM Pemegang Rek</th>
+                            <th class="heada_text">SIM Pemegang Rek After</th>
+                            <th class="head_text">Paspor Pemegang Rek</th>
+                            <th class="heada_text">Paspor Pemegang Rek After</th>
+                            <th class="head_text">SIUP Pemegang Rek</th>
+                            <th class="heada_text">SIUP Pemegang Rek After</th>
+                            <th class="head_text">SITU Pemegang Rek</th>
+                            <th class="heada_text">SITU Pemegang Rek After</th>
+                            <th class="head_text">Akta Pemegang Rek</th>
+                            <th class="heada_text">Akta Pemegang Rek After</th>
+                            <th class="head_text">Kewarganegaraan Pemegang Rek</th>
+                            <th class="heada_text">Kewarganegaraan Pemegang Rek After</th>
+                            <th class="head_text">Tempat Lahir Pemegang Rek</th>
+                            <th class="heada_text">Tempat Lahir Pemegang Rek After</th>
+                            <th class="head_text">Tgl Lahir Pemegang Rek</th>
+                            <th class="heada_text">Tgl Lahir Pemegang Rek After</th>
+                            <th class="head_text">Alamat Korespondensi Pemegang Rek</th>
+                            <th class="heada_text">Alamat Korespondensi Pemegang Rek After</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="userRoleData : ${userRoleDataPersonal}">
+                            <td class="ca_text">
+                                <input type="checkbox" class="chk"  th:value="${userRoleData.IdentitasUnik}" th:field="*{IdUnik}" />
+                            </td>
+
+                            <td class="text-center" bgcolor="FFF8C6" style="border-radius: 2px;">
+                                <div class="dropdown custom-dropdown">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuRole"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                             class="feather feather-more-horizontal">
+                                            <circle cx="12" cy="12" r="1"></circle>
+                                            <circle cx="19" cy="12" r="1"></circle>
+                                            <circle cx="5" cy="12" r="1"></circle>
+                                        </svg>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuRole">
+                                        <div class="user-profile-section">
+                                            <div class="media mx-auto">
+                                                <a class="dropdown-item"
+                                                   th:href="@{'/custody/approval/approvaltemplate/'+${userRoleData.IdentitasUnik}}" ><img src="/assets/img/approve.png" class="img-fluid mr-2" width="30px" height="30px"/>Approve</a>
+                                            </div>
+                                        </div>
+                                        <div class="user-profile-section">
+                                            <div class="media mx-auto">
+                                                <a class="dropdown-item"
+                                                   th:href="@{'/custody/reject/rejecttemplate/'+${userRoleData.IdentitasUnik}}" ><img src="/assets/img/reject.jpg" class="img-fluid mr-2" width="30px" height="30px"/>Reject</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="user-profile-section">
+                                            <div class="media mx-auto">
+                                                <a class="dropdown-item"
+                                                   th:href="@{'/custody/view/viewtemplate/Personal/'+${userRoleData.IdentitasUnik}}"><img src="/assets/img/view.png" class="img-fluid mr-2" width="30px" height="30px"/>View</a>
+                                            </div>
+                                        </div>
+                                    </div>
+<!--                                    <div class="modal fade login-modal" id="modalDeletePersonal">-->
+<!--                                        <div class="modal-dialog modal-sm">-->
+<!--                                            <div class="modal-content">-->
+<!--                                                <div class="modal-header">-->
+<!--                                                    <h4 class="modal-title"> Are you sure want to reject? </h4>-->
+<!--                                                    <span th:text="${userRoleData.IdentitasUnik}" />-->
+<!--                                                </div>-->
+<!--                                                <div class="modal-footer">-->
+<!--                                                    <form action="#" th:action="@{'/orr/reject/rejecttemplate/'+${userRoleData.IdentitasUnik}}" method="get">-->
+<!--                                                        <button class="btn btn-danger" type="submit">Yes</button>-->
+<!--                                                        <button class="btn btn-default" data-dismiss="modal">No</button>-->
+<!--                                                    </form>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="modal fade login-modal" id="modalApprovePersonal">-->
+<!--                                        <div class="modal-dialog modal-sm">-->
+<!--                                            <div class="modal-content">-->
+<!--                                                <div class="modal-header">-->
+<!--                                                    <h4 class="modal-title"> Are you sure want to approve? </h4>-->
+<!--                                                </div>-->
+<!--                                                <div class="modal-footer">-->
+<!--                                                    <form action="#" th:action="@{'/custody/approval/approvaltemplate/'+${userRoleData.IdentitasUnik}}" method="get">-->
+<!--                                                        <button class="btn btn-danger" type="submit">Yes</button>-->
+<!--                                                        <button class="btn btn-default" data-dismiss="modal">No</button>-->
+<!--                                                    </form>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+                                </div>
+                            </td>
+                            <td class="ca_text" th:text="${userRoleData.Username}"></td>
+                            <td class="ca_text" th:text="${userRoleData.Userid}"></td>
+                            <td class="ca_text" th:text="${userRoleData.IdentitasUnik}"></td>
+                            <td class="cb_text" th:if="${userRoleData.IdentitasUnik}== ${userRoleData.IdentitasUnik_imp}" th:text="${userRoleData.IdentitasUnik_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.IdentitasUnik}!= ${userRoleData.IdentitasUnik_imp}" th:text="${userRoleData.IdentitasUnik_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.NomorCIF}"></td>
+                            <td class="cb_text" th:if="${userRoleData.NomorCIF}== ${userRoleData.NomorCIF_imp}"  th:text="${userRoleData.NomorCIF_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.NomorCIF}!= ${userRoleData.NomorCIF_imp}"  th:text="${userRoleData.NomorCIF_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.NomorRekening}"></td>
+                            <td class="cb_text" th:if="${userRoleData.NomorRekening}== ${userRoleData.NomorRekening_imp}" th:text="${userRoleData.NomorRekening_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.NomorRekening}!= ${userRoleData.NomorRekening_imp}" th:text="${userRoleData.NomorRekening_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.NomorCifNomorRekening}"></td>
+                            <td class="cb_text" th:if="${userRoleData.NomorCifNomorRekening}== ${userRoleData.NomorCifNomorRekening_imp}" th:text="${userRoleData.NomorCifNomorRekening_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.NomorCifNomorRekening}!= ${userRoleData.NomorCifNomorRekening_imp}" th:text="${userRoleData.NomorCifNomorRekening_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.StsRekening}"></td>
+                            <td class="cb_text" th:if="${userRoleData.StsRekening}== ${userRoleData.StsRekening_imp}" th:text="${userRoleData.StsRekening_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.StsRekening}!= ${userRoleData.StsRekening_imp}" th:text="${userRoleData.StsRekening_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.JnsPemegangRekening}"></td>
+                            <td class="cb_text" th:if="${userRoleData.JnsPemegangRekening}== ${userRoleData.JnsPemegangRekening_imp}" th:text="${userRoleData.JnsPemegangRekening_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.JnsPemegangRekening}!= ${userRoleData.JnsPemegangRekening_imp}" th:text="${userRoleData.JnsPemegangRekening_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.MataUang}"></td>
+                            <td class="cb_text" th:if="${userRoleData.MataUang}== ${userRoleData.MataUang_imp}" th:text="${userRoleData.MataUang_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.MataUang}!= ${userRoleData.MataUang_imp}" th:text="${userRoleData.MataUang_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.NamaPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.NamaPemegangRek}== ${userRoleData.NamaPemegangRek_imp}" th:text="${userRoleData.NamaPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.NamaPemegangRek}!= ${userRoleData.NamaPemegangRek_imp}" th:text="${userRoleData.NamaPemegangRek_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.NPWPPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.NPWPPemegangRek}== ${userRoleData.NPWPPemegangRek_imp}"  th:text="${userRoleData.NPWPPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.NPWPPemegangRek}!= ${userRoleData.NPWPPemegangRek_imp}"  th:text="${userRoleData.NPWPPemegangRek_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.NIKPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.NIKPemegangRek}== ${userRoleData.NIKPemegangRek_imp}"  th:text="${userRoleData.NIKPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.NIKPemegangRek}!= ${userRoleData.NIKPemegangRek_imp}"  th:text="${userRoleData.NIKPemegangRek_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.SIMPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.SIMPemegangRek}== ${userRoleData.SIMPemegangRek_imp}"  th:text="${userRoleData.SIMPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.SIMPemegangRek}!= ${userRoleData.SIMPemegangRek_imp}"  th:text="${userRoleData.SIMPemegangRek_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.PasporPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.PasporPemegangRek}== ${userRoleData.PasporPemegangRek_imp}"  th:text="${userRoleData.PasporPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.PasporPemegangRek}!= ${userRoleData.PasporPemegangRek_imp}"  th:text="${userRoleData.PasporPemegangRek_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.SIUPPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.SIUPPemegangRek}== ${userRoleData.SIUPPemegangRek_imp}"  th:text="${userRoleData.SIUPPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.SIUPPemegangRek}!= ${userRoleData.SIUPPemegangRek_imp}"  th:text="${userRoleData.SIUPPemegangRek_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.SITUPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.SITUPemegangRek}== ${userRoleData.SITUPemegangRek_imp}"  th:text="${userRoleData.SITUPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.SITUPemegangRek}!= ${userRoleData.SITUPemegangRek_imp}"  th:text="${userRoleData.SITUPemegangRek_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.AktaPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.AktaPemegangRek}== ${userRoleData.AktaPemegangRek_imp}"  th:text="${userRoleData.AktaPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.AktaPemegangRek}!= ${userRoleData.AktaPemegangRek_imp}"  th:text="${userRoleData.AktaPemegangRek_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.KewarganegaraanPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.KewarganegaraanPemegangRek}== ${userRoleData.KewarganegaraanPemegangRek_imp}"  th:text="${userRoleData.KewarganegaraanPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.KewarganegaraanPemegangRek}!= ${userRoleData.KewarganegaraanPemegangRek_imp}"  th:text="${userRoleData.KewarganegaraanPemegangRek_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.TempatLahirPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.TempatLahirPemegangRek}== ${userRoleData.TempatLahirPemegangRek_imp}"  th:text="${userRoleData.TempatLahirPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.TempatLahirPemegangRek}!= ${userRoleData.TempatLahirPemegangRek_imp}"  th:text="${userRoleData.TempatLahirPemegangRek_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.TglLahirPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.TglLahirPemegangRek}== ${userRoleData.TglLahirPemegangRek_imp}"  th:text="${userRoleData.TglLahirPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.TglLahirPemegangRek}!= ${userRoleData.TglLahirPemegangRek_imp}"  th:text="${userRoleData.TglLahirPemegangRek_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.AlamatKorespondensiPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.AlamatKorespondensiPemegangRek}== ${userRoleData.AlamatKorespondensiPemegangRek_imp}"  th:text="${userRoleData.AlamatKorespondensiPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.AlamatKorespondensiPemegangRek}!= ${userRoleData.AlamatKorespondensiPemegangRek_imp}"  th:text="${userRoleData.AlamatKorespondensiPemegangRek_imp}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!--Non personal -->
+        <br><br>
+        <div class="widget-content widget-content-area br-6" id="NonPersonal">
+            <div class="widget-header">
+                <div class="row">
+                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                        <h1>Form Approval Edit Data Domestik Custody</h1><br>
+                        <h2>(Replace Non Personal)</h2><br>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="container">
+                <div class="alert alert-success" role="alert" th:text="${SuccessEntitas}" th:if="${SuccessEntitas}"></div>
+                <div class="alert alert-warning" role="alert" th:text="${FailedEntitas}" th:if="${FailedEntitas}"></div>
+            </div>
+            <div th:switch="${alreadyDataEntitas}" class="container">
+                <div th:case="false" class="table-responsive mb-3 mt-3">
+                    <h3>No Data</h3>
+                </div>
+                <div th:case="true" class="table-responsive mb-3 mt-3">
+                    <table id="Entitas" class="table" style="width:100%">
+                        <caption>
+                            <label th:text="'List of all User Role - total : ' + ${totalRoleDataEntitas}">
+                            </label>
+                        </caption>
+                        <thead class="thead-light">
+                        <tr>
+                            <th class="text-center">Action</th>
+                            <th class="head_text">IdentitasUnik</th>
+                            <th class="heada_text" bgcolor="#F0F8FF">IdentitasUnik After</th>
+                            <th class="head_text">Nama CP</th>
+                            <th class="heada_text">Nama CP After</th>
+                            <th class="head_text">Kode Negara CP</th>
+                            <th class="heada_text">Kode Negara CP After</th>
+                            <th class="head_text">Alamat Dom CP</th>
+                            <th class="heada_text" >Alamat Dom CP After</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="userRoleDataEntitas : ${userRoleDataEntitas}">
+                            <td class="text-center" bgcolor="FFF8C6" style="border-radius: 2px;">
+                                <div class="dropdown custom-dropdown">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuRole2"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                             class="feather feather-more-horizontal">
+                                            <circle cx="12" cy="12" r="1"></circle>
+                                            <circle cx="19" cy="12" r="1"></circle>
+                                            <circle cx="5" cy="12" r="1"></circle>
+                                        </svg>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuRole">
+                                        <div class="user-profile-section">
+                                            <div class="media mx-auto">
+                                                <a class="dropdown-item"
+                                                   th:href="@{'/custody/approval/approvaltemplate/entitas/'+${userRoleDataEntitas.IdentitasUnik}}" ><img src="/assets/img/approve.png" class="img-fluid mr-2" width="30px" height="30px"/>Approve</a>
+                                            </div>
+                                        </div>
+                                        <div class="user-profile-section">
+                                            <div class="media mx-auto">
+                                                <a class="dropdown-item"
+                                                   th:href="@{'/custody/reject/rejecttemplate/entitas/'+${userRoleDataEntitas.IdentitasUnik}}" ><img src="/assets/img/reject.jpg" class="img-fluid mr-2" width="30px" height="30px"/>Reject</a>
+                                            </div>
+                                        </div>
+                                        <div class="user-profile-section">
+                                            <div class="media mx-auto">
+                                                <a class="dropdown-item"
+                                                   th:href="@{'/custody/view/viewtemplate/NonPersonal/'+${userRoleDataEntitas.IdentitasUnik}}"><img src="/assets/img/view.png" class="img-fluid mr-2" width="30px" height="30px"/>View</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal fade login-modal" id="modalDeleteNonPersonal">
+                                        <div class="modal-dialog modal-sm">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title"> Are you sure want to reject? </h4>
+                                                    <span th:text="${userRoleDataEntitas.IdentitasUnik}" />
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <form action="#" th:action="@{'/custody/reject/rejecttemplate/entitas/'+${userRoleDataEntitas.IdentitasUnik}}" method="get">
+                                                        <button class="btn btn-danger" type="submit">Yes</button>
+                                                        <button class="btn btn-default" data-dismiss="modal">No</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal fade login-modal" id="modalApproveNonPersonal">
+                                        <div class="modal-dialog modal-sm">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title"> Are you sure want to approve? </h4>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <form action="#" th:action="@{'/custody/approval/approvaltemplate/entitas/'+${userRoleDataEntitas.IdentitasUnik}}" method="get">
+                                                        <button class="btn btn-danger" type="submit">Yes</button>
+                                                        <button class="btn btn-default" data-dismiss="modal">No</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="ca_text" th:text="${userRoleDataEntitas.IdentitasUnik}"></td>
+                            <td class="cb_text" th:if="${userRoleDataEntitas.IdentitasUnik}== ${userRoleDataEntitas.IdentitasUnik_imp}" th:text="${userRoleDataEntitas.IdentitasUnik_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleDataEntitas.IdentitasUnik}!= ${userRoleDataEntitas.IdentitasUnik_imp}" th:text="${userRoleDataEntitas.IdentitasUnik_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleDataEntitas.NamaCP}"></td>
+                            <td class="cb_text" th:if="${userRoleDataEntitas.NamaCP}== ${userRoleDataEntitas.NamaCP_imp}"  th:text="${userRoleDataEntitas.NamaCP_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleDataEntitas.NamaCP}!= ${userRoleDataEntitas.NamaCP_imp}"  th:text="${userRoleDataEntitas.NamaCP_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleDataEntitas.KodeNegaraCP}"></td>
+                            <td class="cb_text" th:if="${userRoleDataEntitas.KodeNegaraCP}== ${userRoleDataEntitas.KodeNegaraCP_imp}" th:text="${userRoleDataEntitas.KodeNegaraCP_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleDataEntitas.KodeNegaraCP}!= ${userRoleDataEntitas.KodeNegaraCP_imp}" th:text="${userRoleDataEntitas.KodeNegaraCP_imp}"></td>
+                            <td  class="ca_text" th:text="${userRoleDataEntitas.AlamatDomCP}"></td>
+                            <td  class="cb_text" th:if="${userRoleDataEntitas.AlamatDomCP}== ${userRoleDataEntitas.AlamatDomCP_imp}" th:text="${userRoleDataEntitas.AlamatDomCP_imp}"></td>
+                            <td  class="cc_text" th:if="${userRoleDataEntitas.AlamatDomCP}!= ${userRoleDataEntitas.AlamatDomCP_imp}" th:text="${userRoleDataEntitas.AlamatDomCP_imp}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div><br><br>
+
+        <!-- Hapus Personal-->
+        <div class="widget-content widget-content-area br-6" id="HapusPersonal">
+            <div class="widget-header">
+                <div class="row">
+                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                        <h1>Form Approval Edit Data Domestik Custody</h1>
+                        <h2>(Delete Pesonal)</h2><br>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="container">
+                <div class="alert alert-success" role="alert" th:text="${SuccessDelete}" th:if="${SuccessDelete}"></div>
+                <div class="alert alert-warning" role="alert" th:text="${Failed}" th:if="${Failed}"></div>
+            </div>
+            <div th:switch="${alreadyDataDelete}" class="container">
+                <div th:case="false" class="table-responsive mb-3 mt-3">
+                    <h3>No Data</h3>
+                </div>
+                <div th:case="true" class="table-responsive mb-3 mt-3">
+                    <table id="HapusDataRekening" class="table" style="width:100%">
+                        <caption>
+                            <label th:text="'List of all User Role - total : ' + ${totalRoleDataDelete}">
+                            </label>
+                        </caption>
+                        <thead class="thead-light">
+                        <tr>
+                            <th class="head_text">Action</th>
+                            <th class="head_text">Maker Name</th>
+                            <th class="head_text">User ID</th>
+                            <th class="head_text">IdentitasUnik</th>
+                            <th class="heada_text" bgcolor="#F0F8FF">IdentitasUnik After</th>
+                            <th class="head_text">Nomor CIF</th>
+                            <th class="heada_text">Nomor CIF After</th>
+                            <th class="head_text">Nomor Rekening</th>
+                            <th class="heada_text">Nomor Rekening After</th>
+                            <th class="head_text">Nomor Cif Nomor Rekening</th>
+                            <th class="heada_text">Nomor Cif Nomor Rekening After</th>
+                            <th class="head_text">Sts Rekening</th>
+                            <th class="heada_text">Sts Rekening After</th>
+                            <th class="head_text">Jns PemegangRekening</th>
+                            <th class="heada_text">Jns PemegangRekening After</th>
+                            <th class="head_text">Mata Uang</th>
+                            <th class="heada_text">Mata Uang After</th>
+                            <th class="head_text">Nama Pemegang Rek</th>
+                            <th class="heada_text" >Nama Pemegang After</th>
+                            <th class="head_text">NPWP Pemegang Rek</th>
+                            <th class="heada_text">NPWP Pemegang Rek After</th>
+                            <th class="head_text">NIK Pemegang Rek</th>
+                            <th class="heada_text">NIK Pemegang Rek After</th>
+                            <th class="head_text">SIM Pemegang Rek</th>
+                            <th class="heada_text">SIM Pemegang Rek After</th>
+                            <th class="head_text">Paspor Pemegang Rek</th>
+                            <th class="heada_text">Paspor Pemegang Rek After</th>
+                            <th class="head_text">SIUP Pemegang Rek</th>
+                            <th class="heada_text">SIUP Pemegang Rek After</th>
+                            <th class="head_text">SITU Pemegang Rek</th>
+                            <th class="heada_text">SITU Pemegang Rek After</th>
+                            <th class="head_text">Akta Pemegang Rek</th>
+                            <th class="heada_text">Akta Pemegang Rek After</th>
+                            <th class="head_text">Kewarganegaraan Pemegang Rek</th>
+                            <th class="heada_text">Kewarganegaraan Pemegang Rek After</th>
+                            <th class="head_text">Tempat Lahir Pemegang Rek</th>
+                            <th class="heada_text">Tempat Lahir Pemegang Rek After</th>
+                            <th class="head_text">Tgl Lahir Pemegang Rek</th>
+                            <th class="heada_text">Tgl Lahir Pemegang Rek After</th>
+                            <th class="head_text">Alamat Korespondensi Pemegang Rek</th>
+                            <th class="heada_text">Alamat Korespondensi Pemegang Rek After</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="userRoleData : ${userRoleDataDelete}">
+                            <td class="text-center" bgcolor="FFF8C6" style="border-radius: 2px;">
+                                <div class="dropdown custom-dropdown">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuRoleHapus"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                             class="feather feather-more-horizontal">
+                                            <circle cx="12" cy="12" r="1"></circle>
+                                            <circle cx="19" cy="12" r="1"></circle>
+                                            <circle cx="5" cy="12" r="1"></circle>
+                                        </svg>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuRoleHapus">
+                                        <div class="user-profile-section">
+                                            <div class="media mx-auto">
+                                                <a class="dropdown-item"
+                                                   th:href="@{'/custody/approval/approvaltemplatedelete/'+${userRoleData.IdentitasUnik}}" ><img src="/assets/img/approve.png" class="img-fluid mr-2" width="30px" height="30px"/>Approve</a>
+                                            </div>
+                                        </div>
+                                        <div class="user-profile-section">
+                                            <div class="media mx-auto">
+                                                <a class="dropdown-item"
+                                                   th:href="@{'/custody/reject/rejecttemplatedelete/'+${userRoleData.IdentitasUnik}}" ><img src="/assets/img/reject.jpg" class="img-fluid mr-2" width="30px" height="30px"/>Reject</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="user-profile-section">
+                                            <div class="media mx-auto">
+                                                <a class="dropdown-item"
+                                                   th:href="@{'/custody/view/viewtemplatedelete/Personal/'+${userRoleData.IdentitasUnik}}"><img src="/assets/img/view.png" class="img-fluid mr-2" width="30px" height="30px"/>View</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="ca_text" th:text="${userRoleData.Username}"></td>
+                            <td class="ca_text" th:text="${userRoleData.Userid}"></td>
+                            <td class="ca_text" th:text="${userRoleData.IdentitasUnik}"></td>
+                            <td class="cb_text" th:if="${userRoleData.IdentitasUnik}== ${userRoleData.IdentitasUnik_imp}" th:text="${userRoleData.IdentitasUnik_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.IdentitasUnik}!= ${userRoleData.IdentitasUnik_imp}" th:text="${userRoleData.IdentitasUnik_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.NomorCIF}"></td>
+                            <td class="cb_text" th:if="${userRoleData.NomorCIF}== ${userRoleData.NomorCIF_imp}"  th:text="${userRoleData.NomorCIF_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.NomorCIF}!= ${userRoleData.NomorCIF_imp}"  th:text="${userRoleData.NomorCIF_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.NomorRekening}"></td>
+                            <td class="cb_text" th:if="${userRoleData.NomorRekening}== ${userRoleData.NomorRekening_imp}" th:text="${userRoleData.NomorRekening_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.NomorRekening}!= ${userRoleData.NomorRekening_imp}" th:text="${userRoleData.NomorRekening_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.NomorCifNomorRekening}"></td>
+                            <td class="cb_text" th:if="${userRoleData.NomorCifNomorRekening}== ${userRoleData.NomorCifNomorRekening_imp}" th:text="${userRoleData.NomorCifNomorRekening_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.NomorCifNomorRekening}!= ${userRoleData.NomorCifNomorRekening_imp}" th:text="${userRoleData.NomorCifNomorRekening_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.StsRekening}"></td>
+                            <td class="cb_text" th:if="${userRoleData.StsRekening}== ${userRoleData.StsRekening_imp}" th:text="${userRoleData.StsRekening_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.StsRekening}!= ${userRoleData.StsRekening_imp}" th:text="${userRoleData.StsRekening_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.JnsPemegangRekening}"></td>
+                            <td class="cb_text" th:if="${userRoleData.JnsPemegangRekening}== ${userRoleData.JnsPemegangRekening_imp}" th:text="${userRoleData.JnsPemegangRekening_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.JnsPemegangRekening}!= ${userRoleData.JnsPemegangRekening_imp}" th:text="${userRoleData.JnsPemegangRekening_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.MataUang}"></td>
+                            <td class="cb_text" th:if="${userRoleData.MataUang}== ${userRoleData.MataUang_imp}" th:text="${userRoleData.MataUang_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.MataUang}!= ${userRoleData.MataUang_imp}" th:text="${userRoleData.MataUang_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.NamaPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.NamaPemegangRek}== ${userRoleData.NamaPemegangRek_imp}" th:text="${userRoleData.NamaPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.NamaPemegangRek}!= ${userRoleData.NamaPemegangRek_imp}" th:text="${userRoleData.NamaPemegangRek_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.NPWPPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.NPWPPemegangRek}== ${userRoleData.NPWPPemegangRek_imp}"  th:text="${userRoleData.NPWPPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.NPWPPemegangRek}!= ${userRoleData.NPWPPemegangRek_imp}"  th:text="${userRoleData.NPWPPemegangRek_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.NIKPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.NIKPemegangRek}== ${userRoleData.NIKPemegangRek_imp}"  th:text="${userRoleData.NIKPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.NIKPemegangRek}!= ${userRoleData.NIKPemegangRek_imp}"  th:text="${userRoleData.NIKPemegangRek_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.SIMPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.SIMPemegangRek}== ${userRoleData.SIMPemegangRek_imp}"  th:text="${userRoleData.SIMPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.SIMPemegangRek}!= ${userRoleData.SIMPemegangRek_imp}"  th:text="${userRoleData.SIMPemegangRek_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.PasporPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.PasporPemegangRek}== ${userRoleData.PasporPemegangRek_imp}"  th:text="${userRoleData.PasporPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.PasporPemegangRek}!= ${userRoleData.PasporPemegangRek_imp}"  th:text="${userRoleData.PasporPemegangRek_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.SIUPPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.SIUPPemegangRek}== ${userRoleData.SIUPPemegangRek_imp}"  th:text="${userRoleData.SIUPPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.SIUPPemegangRek}!= ${userRoleData.SIUPPemegangRek_imp}"  th:text="${userRoleData.SIUPPemegangRek_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.SITUPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.SITUPemegangRek}== ${userRoleData.SITUPemegangRek_imp}"  th:text="${userRoleData.SITUPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.SITUPemegangRek}!= ${userRoleData.SITUPemegangRek_imp}"  th:text="${userRoleData.SITUPemegangRek_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.AktaPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.AktaPemegangRek}== ${userRoleData.AktaPemegangRek_imp}"  th:text="${userRoleData.AktaPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.AktaPemegangRek}!= ${userRoleData.AktaPemegangRek_imp}"  th:text="${userRoleData.AktaPemegangRek_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.KewarganegaraanPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.KewarganegaraanPemegangRek}== ${userRoleData.KewarganegaraanPemegangRek_imp}"  th:text="${userRoleData.KewarganegaraanPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.KewarganegaraanPemegangRek}!= ${userRoleData.KewarganegaraanPemegangRek_imp}"  th:text="${userRoleData.KewarganegaraanPemegangRek_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.TempatLahirPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.TempatLahirPemegangRek}== ${userRoleData.TempatLahirPemegangRek_imp}"  th:text="${userRoleData.TempatLahirPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.TempatLahirPemegangRek}!= ${userRoleData.TempatLahirPemegangRek_imp}"  th:text="${userRoleData.TempatLahirPemegangRek_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.TglLahirPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.TglLahirPemegangRek}== ${userRoleData.TglLahirPemegangRek_imp}"  th:text="${userRoleData.TglLahirPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.TglLahirPemegangRek}!= ${userRoleData.TglLahirPemegangRek_imp}"  th:text="${userRoleData.TglLahirPemegangRek_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleData.AlamatKorespondensiPemegangRek}"></td>
+                            <td class="cb_text" th:if="${userRoleData.AlamatKorespondensiPemegangRek}== ${userRoleData.AlamatKorespondensiPemegangRek_imp}"  th:text="${userRoleData.AlamatKorespondensiPemegangRek_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleData.AlamatKorespondensiPemegangRek}!= ${userRoleData.AlamatKorespondensiPemegangRek_imp}"  th:text="${userRoleData.AlamatKorespondensiPemegangRek_imp}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!--Hapus Non personal -->
+        <br><br>
+        <div class="widget-content widget-content-area br-6" id="HapusNonPersonal">
+            <div class="widget-header">
+                <div class="row">
+                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                        <h1>Form Approval Edit Data Domestik Custody</h1><br>
+                        <h2>(Delete Non Personal)</h2><br>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="container">
+                <div class="alert alert-success" role="alert" th:text="${SuccessEntitasDelete}" th:if="${SuccessEntitasDelete}"></div>
+                <div class="alert alert-warning" role="alert" th:text="${FailedEntitasDelete}" th:if="${FailedEntitasDelete}"></div>
+            </div>
+            <div th:switch="${alreadyDataEntitasDelete}" class="container">
+                <div th:case="false" class="table-responsive mb-3 mt-3">
+                    <h3>No Data</h3>
+                </div>
+                <div th:case="true" class="table-responsive mb-3 mt-3">
+                    <table id="EntitasDelete" class="table" style="width:100%">
+                        <caption>
+                            <label th:text="'List of all User Role - total : ' + ${totalRoleDataEntitasDelete}">
+                            </label>
+                        </caption>
+                        <thead class="thead-light">
+                        <tr>
+                            <th class="text-center">Action</th>
+                            <th class="head_text">IdentitasUnik</th>
+                            <th class="heada_text" bgcolor="#F0F8FF">IdentitasUnik After</th>
+                            <th class="head_text">Nama CP</th>
+                            <th class="heada_text">Nama CP After</th>
+                            <th class="head_text">Kode Negara CP</th>
+                            <th class="heada_text">Kode Negara CP After</th>
+                            <th class="head_text">Alamat Dom CP</th>
+                            <th class="heada_text" >Alamat Dom CP After</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="userRoleDataEntitas : ${userRoleDataEntitasDelete}">
+                            <td class="text-center" bgcolor="FFF8C6" style="border-radius: 2px;">
+                                <div class="dropdown custom-dropdown">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuRole2Delete"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                             class="feather feather-more-horizontal">
+                                            <circle cx="12" cy="12" r="1"></circle>
+                                            <circle cx="19" cy="12" r="1"></circle>
+                                            <circle cx="5" cy="12" r="1"></circle>
+                                        </svg>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuRoleDelete">
+                                        <div class="user-profile-section">
+                                            <div class="media mx-auto">
+                                                <a class="dropdown-item"
+                                                   th:href="@{'/custody/approval/approvaltemplatedelete/entitas/'+${userRoleDataEntitas.IdentitasUnik}}" ><img src="/assets/img/approve.png" class="img-fluid mr-2" width="30px" height="30px"/>Approve</a>
+                                            </div>
+                                        </div>
+                                        <div class="user-profile-section">
+                                            <div class="media mx-auto">
+                                                <a class="dropdown-item"
+                                                   th:href="@{'/custody/reject/rejecttemplatedelete/entitas/'+${userRoleDataEntitas.IdentitasUnik}}" ><img src="/assets/img/reject.jpg" class="img-fluid mr-2" width="30px" height="30px"/>Reject</a>
+                                            </div>
+                                        </div>
+                                        <div class="user-profile-section">
+                                            <div class="media mx-auto">
+                                                <a class="dropdown-item"
+                                                   th:href="@{'/custody/view/viewtemplatedelete/NonPersonal/'+${userRoleDataEntitas.IdentitasUnik}}"><img src="/assets/img/view.png" class="img-fluid mr-2" width="30px" height="30px"/>View</a>
+                                            </div>
+                                        </div>
+                                    </div>
+<!--                                    <div class="modal fade login-modal" id="modalDeleteNonPersonalDelete">-->
+<!--                                        <div class="modal-dialog modal-sm">-->
+<!--                                            <div class="modal-content">-->
+<!--                                                <div class="modal-header">-->
+<!--                                                    <h4 class="modal-title"> Are you sure want to reject? </h4>-->
+<!--                                                    <span th:text="${userRoleDataEntitas.IdentitasUnik}" />-->
+<!--                                                </div>-->
+<!--                                                <div class="modal-footer">-->
+<!--                                                    <form action="#" th:action="@{'/custody/reject/rejecttemplate/entitas/'+${userRoleDataEntitas.IdentitasUnik}}" method="get">-->
+<!--                                                        <button class="btn btn-danger" type="submit">Yes</button>-->
+<!--                                                        <button class="btn btn-default" data-dismiss="modal">No</button>-->
+
+<!--                                                    </form>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="modal fade login-modal" id="modalApproveNonPersonal">-->
+<!--                                        <div class="modal-dialog modal-sm">-->
+<!--                                            <div class="modal-content">-->
+<!--                                                <div class="modal-header">-->
+<!--                                                    <h4 class="modal-title"> Are you sure want to approve? </h4>-->
+<!--                                                </div>-->
+<!--                                                <div class="modal-footer">-->
+<!--                                                    <form action="#" th:action="@{'/custody/approval/approvaltemplate/entitas/'+${userRoleDataEntitas.IdentitasUnik}}" method="get">-->
+<!--                                                        <button class="btn btn-danger" type="submit">Yes</button>-->
+<!--                                                        <button class="btn btn-default" data-dismiss="modal">No</button>-->
+<!--                                                    </form>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+                                </div>
+                            </td>
+                            <td class="ca_text" th:text="${userRoleDataEntitas.IdentitasUnik}"></td>
+                            <td class="cb_text" th:if="${userRoleDataEntitas.IdentitasUnik}== ${userRoleDataEntitas.IdentitasUnik_imp}" th:text="${userRoleDataEntitas.IdentitasUnik_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleDataEntitas.IdentitasUnik}!= ${userRoleDataEntitas.IdentitasUnik_imp}" th:text="${userRoleDataEntitas.IdentitasUnik_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleDataEntitas.NamaCP}"></td>
+                            <td class="cb_text" th:if="${userRoleDataEntitas.NamaCP}== ${userRoleDataEntitas.NamaCP_imp}"  th:text="${userRoleDataEntitas.NamaCP_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleDataEntitas.NamaCP}!= ${userRoleDataEntitas.NamaCP_imp}"  th:text="${userRoleDataEntitas.NamaCP_imp}"></td>
+                            <td class="ca_text" th:text="${userRoleDataEntitas.KodeNegaraCP}"></td>
+                            <td class="cb_text" th:if="${userRoleDataEntitas.KodeNegaraCP}== ${userRoleDataEntitas.KodeNegaraCP_imp}" th:text="${userRoleDataEntitas.KodeNegaraCP_imp}"></td>
+                            <td class="cc_text" th:if="${userRoleDataEntitas.KodeNegaraCP}!= ${userRoleDataEntitas.KodeNegaraCP_imp}" th:text="${userRoleDataEntitas.KodeNegaraCP_imp}"></td>
+                            <td  class="ca_text" th:text="${userRoleDataEntitas.AlamatDomCP}"></td>
+                            <td  class="cb_text" th:if="${userRoleDataEntitas.AlamatDomCP}== ${userRoleDataEntitas.AlamatDomCP_imp}" th:text="${userRoleDataEntitas.AlamatDomCP_imp}"></td>
+                            <td  class="cc_text" th:if="${userRoleDataEntitas.AlamatDomCP}!= ${userRoleDataEntitas.AlamatDomCP_imp}" th:text="${userRoleDataEntitas.AlamatDomCP_imp}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div><br><br>
+
+    </div>
+</div>
+</body>
